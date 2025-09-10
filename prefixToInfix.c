@@ -39,16 +39,16 @@ char* pop() {
 void pti(char pre[max]) {
     char op1[max];
     char op2[max];
-    char infix[max];
+    char infix[max * 2];
 
-    for (int i = 0; pre[i] != '\0'; i++) {
+    for (int i = strlen(pre) - 1; i >= 0; i--) {
         if((pre[i] >= 'a' && pre[i] <= 'z') || (pre[i] >= '0' && pre[i] <= '9')){
             char operand[2] = {pre[i], '\0'};
             push(operand);
         }
-        else if (pre[i] == '+' || pre[i] == '-' || pre[i] == '*' || pre[i] == '/' || pre[i] == '%') {
-            strcpy(op1, pop());
+        else{
             strcpy(op2, pop());
+            strcpy(op1, pop());
             infix[0] = '\0';
             strcat(infix, "(");
             strcat(infix, op2);
@@ -61,12 +61,7 @@ void pti(char pre[max]) {
         }
     }
 
-    if (!isEmpty()) {
-        printf("Infix expression: %s\n", stack[top]);
-    }
-    else {
-        printf("Invalid postfix expression.\n");
-    }
+    printf("Infix expression: %s\n", stack[top]);
 }
 
 int main() {
