@@ -42,7 +42,8 @@ void pti(char post[max]) {
         if((post[i] >= 'a' && post[i] <= 'z') || (post[i] >= '0' && post[i] <= '9')){
             char operand[2] = {post[i], '\0'};
             push(operand);
-        } else if (post[i] == '+' || post[i] == '-' || post[i] == '*' || post[i] == '/' || post[i] == '%') {
+        } 
+        else{
             strcpy(op1, pop());
             strcpy(op2, pop());
             infix[0] = '\0';
