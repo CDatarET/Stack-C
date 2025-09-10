@@ -20,7 +20,8 @@ void push(char *str) {
         top++;
         strcpy(stack[top], str);
     } else {
-        printf("Stack Overflow\n");
+        printf("Stack Overflow Error. Terminating...\n");
+        abort();
     }
 }
 
@@ -28,8 +29,8 @@ char* pop() {
     if (!isEmpty()) {
         return stack[top--];
     } else {
-        printf("Stack Empty\n");
-        return "";
+        printf("Stack Underflow Error. Terminating...\n");
+        abort();
     }
 }
 
