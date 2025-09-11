@@ -34,23 +34,40 @@ void push(char* str){
     strcpy(stack[top], str);
 }
 
-void itp(char in[max]){
+void postToPre(char post[max]){
     char op1[max];
     char op2[max];
     int i = 0;
     
-    while(in[i] != '\0'){
-        //fill in later
+    while(post[i] != '\0'){
+        if((post[i] >= '0' && post[i] <= '9') || (post[i] >= 'a' && post[i] <= 'z')){
+            char t[] = {post[i], '\0'};
+            push(t);
+        }
+        else{
+            strcpy(op2, pop());
+            strcpy(op1, pop());
+            char t[max];
+            t[0] = post[i];
+            t[1] = '\0';
+
+            char temp[max];
+            strcpy(temp, t);
+            strcat(temp, op1);
+            strcat(temp, op2);
+            
+            push(temp);
+        }
         i++;
     }
-    printf("\n");
+    printf("%s\n", pop());
 }
 
 int main() {
-    char in[max];
-    printf("Enter infix expression: ");
-    scanf("%s", in);
-    itp(in);
+    char post[max];
+    printf("Enter postfix expression: ");
+    scanf("%s", post);
+    postToPre(post);
     
     return 0;
 }
