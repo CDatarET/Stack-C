@@ -64,7 +64,7 @@ void preToPost(char pre[max]){
 
 int main() {
     char pre[max];
-    printf("Enter pre expression: ");
+    printf("Enter prefix expression: ");
     scanf("%s", pre);
     preToPost(pre);
     
