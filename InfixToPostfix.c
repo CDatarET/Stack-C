@@ -4,7 +4,7 @@
 
 #define max 50
 
-char stack[max][max];
+char stack[max];
 int top = -1;
 
 int isFull() {
@@ -15,34 +15,35 @@ int isEmpty() {
     return (top == -1);
 }
 
-void push(char *str) {
+void push(char c) {
     if (!isFull()) {
         top++;
-        strcpy(stack[top], str);
+        stack[top] = c;
     }
     else{
-        printf("Stack Overflow Error. Terminating...\n");
+        printf("\nStack Overflow Error. Terminating...\n");
         abort();
     }
 }
 
-char* pop() {
+char pop() {
     if (!isEmpty()) {
         return stack[top--];
     }
     else{
-        printf("Stack Underflow Error. Terminating...\n");
+        printf("\nStack Underflow Error. Terminating...\n");
         abort();
     }
 }
 
-int precedence(char ch) {
-    switch(ch) {
+int isp(char c) {
+    switch(c) {
         case '+':
         case '-':
             return 1;
         case '*':
         case '/':
+        case '%':
             return 2;
         case '^':
             return 3;
@@ -50,55 +51,66 @@ int precedence(char ch) {
     return 0;
 }
 
-void infixToPostfix(char infix[max]) {
-    char postfix[max] = "";
-    char temp[2];
-    char topOp[2];
-    int i;
+int icp(char c) {
+    switch(c) {
+        case '+':
+        case '-':
+            return 1;
+        case '*':
+        case '/':
+        case '%':
+            return 2;
+        case '^':
+            return 4;
+        case '(':
+        case ')':
+            return 5;
+    }
+    return 0;
+}
 
-    for(i = 0; infix[i] != '\0'; i++) {
-        char ch = infix[i];
-
-        // If operand, add to postfix
-        if((ch >= 'a' && ch <= 'z') || (ch >= '0' && ch <= '9')) {
-            temp[0] = ch;
-            temp[1] = '\0';
-            strcat(postfix, temp);
+void itp(char infix[max]) {
+    for(int i = 0; infix[i] != '\0'; i++){
+        if((infix[i] >= 'a' && infix[i] <= 'z') || (infix[i] >= '0' && infix[i] <= '9')){
+            printf("%c", infix[i]);
         }
-        else if(ch == '(') {
-            temp[0] = ch;
-            temp[1] = '\0';
-            push(temp);
-        }
-        else if(ch == ')') {
-            while(!isEmpty() && strcmp(stack[top], "(") != 0) {
-                strcat(postfix, pop());
+        else{
+            if(infix[i] == '('){
+                push('(');
             }
-            if(!isEmpty() && strcmp(stack[top], "(") == 0) {
-                pop(); // remove '(' from stack
+            else if(infix[i] == ')'){
+                while(stack[top] != '('){
+                    printf("%c", pop());
+                }
+                char t = pop();//clear '(' from stack
             }
-        }
-        else { // operator
-            while(!isEmpty() && precedence(stack[top][0]) >= precedence(ch)) {
-                strcat(postfix, pop());
+            else{
+                if(isEmpty()){
+                    push(infix[i]);
+                }
+                else{
+                    if(isp(stack[top]) >= icp(infix[i])){
+                        while(isp(stack[top]) >= icp(infix[i]) && !isEmpty()){
+                            printf("%c", pop());
+                        } 
+                    }
+                    push(infix[i]);
+                }
+                
             }
-            temp[0] = ch;
-            temp[1] = '\0';
-            push(temp);
         }
     }
 
-    while(!isEmpty()) {
-        strcat(postfix, pop());
+    while(!isEmpty()){
+        printf("%c", pop());
     }
-
-    printf("Postfix expression: %s\n", postfix);
+    printf("\n");
 }
 
 int main() {
     char infix[max];
-    printf("Enter infix expression: ");
+    printf("Enter Infix expression: ");
     scanf("%s", infix);
-    infixToPostfix(infix);
+    itp(infix);
     return 0;
 }
